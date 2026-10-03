@@ -1,0 +1,221 @@
+<!-- ─── Hero ─────────────────────────────────────────────────────────────── -->
+<section class="hero">
+  <app-facets />
+  <div class="container hero-grid">
+    <div class="hero-copy">
+      <p class="eyebrow" reveal>{{ settings().hero.eyebrow }}</p>
+      <h1 reveal [revealDelay]="80">
+        @for (word of settings().hero.title.split(' '); track $index; let last = $last) {
+          <span [class.text-gradient]="last">{{ word }}</span>{{ ' ' }}
+        }
+      </h1>
+      <p class="lead" reveal [revealDelay]="160">{{ settings().hero.subtitle }}</p>
+      <div class="actions" reveal [revealDelay]="240">
+        <a routerLink="/projects" class="btn">Explore our work <span class="arrow">→</span></a>
+        <a routerLink="/contact" class="btn btn--ghost">Work with us</a>
+      </div>
+    </div>
+
+    <div class="hero-visual" reveal [revealDelay]="200">
+      <app-logo-mark class="orbit" [spin]="true" />
+      <figure class="photo">
+        <img src="/assets/photos/photo-05.jpeg" alt="The DevHub field team after a training session" width="1080" height="810" fetchpriority="high" />
+      </figure>
+      @if (ongoing(); as live) {
+        <a class="float float--live" [routerLink]="['/projects', live.slug]">
+          <span class="chip chip--live">Now in the field</span>
+          <strong>{{ live.title }}</strong>
+          <small>{{ live.period_label }}</small>
+        </a>
+      }
+      <div class="float float--badge">
+        <span class="badge-icon">✓</span>
+        <div><strong>Ethically certified</strong><small>enumerators on every study</small></div>
+      </div>
+    </div>
+  </div>
+  <a href="#about" class="scroll-cue" aria-label="Scroll to about"><span></span></a>
+</section>
+
+<!-- ─── Partners marquee ─────────────────────────────────────────────────── -->
+<section class="marquee" aria-label="Institutions our team has worked with">
+  <p class="marquee-label">Trusted by researchers &amp; institutions including</p>
+  <div class="marquee-track">
+    @for (pass of [0, 1]; track pass) {
+      <ul [attr.aria-hidden]="pass === 1">
+        @for (p of partners; track p) {
+          <li>{{ p }}</li>
+        }
+      </ul>
+    }
+  </div>
+</section>
+
+<!-- ─── About ────────────────────────────────────────────────────────────── -->
+<section class="section about" id="about">
+  <div class="container">
+    <p class="ghost-title" aria-hidden="true">about DevHub</p>
+    <div class="about-grid">
+      <div reveal>
+        <h2>Reliable data, from the <span class="text-gradient">question</span> to the <span class="text-gradient">field</span>.</h2>
+        <p class="lead">{{ about.lead }}</p>
+        <p>{{ about.paragraphs[0] }}</p>
+        <div class="focus">
+          @for (area of focusAreas; track area) {
+            <span class="chip">{{ area }} research</span>
+          }
+        </div>
+        <a routerLink="/about" class="link-arrow">More about DevHub <span>→</span></a>
+      </div>
+      <div class="about-media" reveal [revealDelay]="150">
+        <img src="/assets/photos/photo-03.jpeg" alt="Field team reviewing questionnaires during training" loading="lazy" />
+        <img src="/assets/photos/photo-06.jpeg" alt="DevHub supervisors coordinating fieldwork on site" loading="lazy" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── Expertise ────────────────────────────────────────────────────────── -->
+<section class="expertise" aria-labelledby="expertise-title">
+  <div class="container expertise-head">
+    <p class="ghost-title" aria-hidden="true">our expertise</p>
+    <h2 id="expertise-title" class="sr-only">Our expertise</h2>
+  </div>
+  <div class="columns" role="list">
+    @for (e of expertise; track e.slug; let i = $index) {
+      <a class="column" role="listitem" [routerLink]="'/services'" [fragment]="e.slug"
+         [style.--col]="e.color" [class.active]="activeExpertise() === i"
+         (mouseenter)="activeExpertise.set(i)" (focus)="activeExpertise.set(i)">
+        <app-icon [name]="e.icon" />
+        <h3>{{ e.title }}</h3>
+        <div class="column-detail">
+          <p>{{ e.blurb }}</p>
+          <ul>
+            @for (pt of e.points; track pt) {
+              <li>{{ pt }}</li>
+            }
+          </ul>
+        </div>
+        <span class="column-index">0{{ i + 1 }}</span>
+      </a>
+    }
+  </div>
+</section>
+
+<!-- ─── Stats ────────────────────────────────────────────────────────────── -->
+<section class="section--tight stats">
+  <div class="container stats-grid">
+    @for (s of settings().stats; track s.label; let i = $index) {
+      <div class="stat" reveal [revealDelay]="i * 90">
+        <strong [countUp]="s.value" [countSuffix]="s.suffix"></strong>
+        <span>{{ s.label }}</span>
+      </div>
+    }
+  </div>
+</section>
+
+<!-- ─── Process ──────────────────────────────────────────────────────────── -->
+<section class="section section--dark process">
+  <app-logo-mark class="process-mark" />
+  <div class="container">
+    <p class="eyebrow">How we work</p>
+    <h2 class="process-title">From research question<br />to clean dataset.</h2>
+    <ol class="steps">
+      @for (step of process; track step.step; let i = $index) {
+        <li reveal [revealDelay]="i * 80">
+          <span class="step-no">{{ step.step }}</span>
+          <h3>{{ step.title }}</h3>
+          <p>{{ step.text }}</p>
+        </li>
+      }
+    </ol>
+  </div>
+</section>
+
+<!-- ─── Projects ─────────────────────────────────────────────────────────── -->
+<section class="section projects">
+  <div class="container">
+    <div class="head-row">
+      <div>
+        <p class="ghost-title" aria-hidden="true">our projects</p>
+        <h2 class="sr-only">Our projects</h2>
+      </div>
+      <a routerLink="/projects" class="link-arrow">All projects <span>→</span></a>
+    </div>
+  </div>
+  <div class="bands">
+    @for (p of projects(); track p.id; let i = $index) {
+      <a class="band" [routerLink]="['/projects', p.slug]" [style.--band]="bandColors[i % bandColors.length]" reveal>
+        <div class="container band-inner">
+          <div class="band-client">
+            <small>{{ p.client_detail ? 'Client / PI' : 'Client' }}</small>
+            <strong>{{ p.client }}</strong>
+          </div>
+          <div class="band-title">
+            <h3>{{ p.title }}</h3>
+            <span class="band-period">{{ p.period_label }}</span>
+          </div>
+          @if (p.cover_url) {
+            <img class="band-thumb" [src]="p.cover_url" alt="" loading="lazy" />
+          }
+          <span class="band-go" aria-hidden="true">→</span>
+        </div>
+      </a>
+    } @empty {
+      <div class="container"><div class="skeleton" style="height: 320px"></div></div>
+    }
+  </div>
+</section>
+
+<!-- ─── Insights ─────────────────────────────────────────────────────────── -->
+@if (posts().length) {
+  <section class="section section--lavender">
+    <div class="container">
+      <div class="head-row">
+        <div>
+          <p class="eyebrow">Insights</p>
+          <h2>Notes from the field</h2>
+        </div>
+        <a routerLink="/insights" class="link-arrow">All insights <span>→</span></a>
+      </div>
+      <div class="grid grid-3">
+        @for (post of posts(); track post.id; let i = $index) {
+          <a class="card" [routerLink]="['/insights', post.slug]" reveal [revealDelay]="i * 90">
+            <div class="card-media">
+              <img [src]="post.cover_url || '/assets/photos/photo-07.jpeg'" [alt]="post.title" loading="lazy" />
+            </div>
+            <div class="card-body">
+              <p class="muted small">{{ post.published_at | date: 'd MMM y' }}</p>
+              <h3>{{ post.title }}</h3>
+              <p class="muted">{{ post.excerpt }}</p>
+            </div>
+          </a>
+        }
+      </div>
+    </div>
+  </section>
+}
+
+<!-- ─── Gallery strip ────────────────────────────────────────────────────── -->
+@if (gallery().length) {
+  <section class="section--tight strip-wrap">
+    <div class="container head-row">
+      <div>
+        <p class="eyebrow">In the field</p>
+        <h2>Our people, at work.</h2>
+      </div>
+      <a routerLink="/gallery" class="link-arrow">Open the gallery <span>→</span></a>
+    </div>
+    <div class="strip">
+      <div class="strip-track">
+        @for (pass of [0, 1]; track pass) {
+          @for (g of gallery(); track g.id) {
+            <figure [attr.aria-hidden]="pass === 1">
+              <img [src]="g.image_url" [alt]="pass === 0 ? g.caption : ''" loading="lazy" />
+            </figure>
+          }
+        }
+      </div>
+    </div>
+  </section>
+}
