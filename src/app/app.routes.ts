@@ -29,6 +29,7 @@ export const routes: Routes = [
       { path: 'projects/new', ...page(() => import('./features/admin/project-edit.component').then((m) => m.ProjectEditComponent)) },
       { path: 'projects/:id', ...page(() => import('./features/admin/project-edit.component').then((m) => m.ProjectEditComponent)) },
       { path: 'gallery', ...page(() => import('./features/admin/gallery-admin.component').then((m) => m.GalleryAdminComponent)) },
+      { path: 'team', ...page(() => import('./features/admin/team-admin.component').then((m) => m.TeamAdminComponent)) },
       { path: 'messages', ...page(() => import('./features/admin/messages.component').then((m) => m.MessagesComponent)) },
       { path: 'settings', ...page(() => import('./features/admin/settings.component').then((m) => m.SettingsComponent)) },
     ],

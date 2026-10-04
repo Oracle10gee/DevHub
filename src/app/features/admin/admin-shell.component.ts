@@ -24,6 +24,7 @@ import { AuthService } from '../../core/auth.service';
           <a routerLink="/admin/posts" routerLinkActive="on">Posts</a>
           <a routerLink="/admin/projects" routerLinkActive="on">Projects</a>
           <a routerLink="/admin/gallery" routerLinkActive="on">Gallery</a>
+          <a routerLink="/admin/team" routerLinkActive="on">Team</a>
           <a routerLink="/admin/messages" routerLinkActive="on">Messages</a>
           <a routerLink="/admin/settings" routerLinkActive="on">Site settings</a>
         </nav>

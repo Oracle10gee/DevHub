@@ -1,14 +1,17 @@
-import { Component, inject } from '@angular/core';
-import { CEO, FIELD_LEADS, MANAGEMENT, TEAM_LEADS } from '../../data/site-content';
+import { Component, OnInit, inject, signal } from '@angular/core';
+import { CEO } from '../../data/site-content';
+import { ContentService } from '../../data/content.service';
+import type { TeamNode } from '../../core/models';
 import { SeoService } from '../../core/seo.service';
+import { buildTeamTree } from '../../shared/team-tree';
 import { RevealDirective } from '../../shared/reveal.directive';
 import { LogoMarkComponent } from '../../shared/logo-mark.component';
-import { AvatarComponent } from '../../shared/avatar.component';
+import { OrgChartComponent } from '../../shared/org-chart.component';
 
 @Component({
   selector: 'app-team',
   standalone: true,
-  imports: [RevealDirective, LogoMarkComponent, AvatarComponent],
+  imports: [RevealDirective, LogoMarkComponent, OrgChartComponent],
   template: `
     <section class="page-hero">
       <app-logo-mark class="mark" [spin]="true" />
@@ -38,46 +41,31 @@ import { AvatarComponent } from '../../shared/avatar.component';
       <div class="container">
         <p class="ghost-title" aria-hidden="true">the team</p>
         <h2 class="sr-only">Management team</h2>
-
-        <div class="tree">
-          <div class="tier" reveal>
-            <div class="person top">
-              <app-avatar [name]="ceo.name" style="--size: 96px" />
-              <strong>{{ ceo.name }}</strong><span>Principal Consultant</span>
-            </div>
-          </div>
-          <div class="tier" reveal>
-            @for (p of management; track p.name) {
-              <div class="person"><app-avatar [name]="p.name" /><strong>{{ p.name }}</strong><span>{{ p.role }}</span></div>
-            }
-          </div>
-          <div class="tier" reveal>
-            @for (p of fieldLeads; track p.name) {
-              <div class="person"><app-avatar [name]="p.name" /><strong>{{ p.name }}</strong><span>{{ p.role }}</span></div>
-            }
+        @if (loading()) {
+          <div class="skeleton" style="height: 420px"></div>
+        } @else if (management().length) {
+          <div class="chart-scroll" reveal>
+            <app-org-chart [nodes]="management()" />
           </div>
           <div class="enumerators" reveal>
             <strong>30+ enumerators</strong>
             <span>Ethically certified field researchers, trained on every instrument before they go to the field.</span>
           </div>
-        </div>
+        }
       </div>
     </section>
 
-    <section class="section">
-      <div class="container">
-        <p class="eyebrow">Team leads &amp; legacy team</p>
-        <h2>Leading in the field.</h2>
-        <div class="leads">
-          @for (p of teamLeads; track p.name; let i = $index) {
-            <div class="lead-card" reveal [revealDelay]="i * 80">
-              <app-avatar [name]="p.name" style="--size: 84px" />
-              <strong>{{ p.name }}</strong><span>{{ p.role }}</span>
-            </div>
-          }
+    @if (leads().length) {
+      <section class="section">
+        <div class="container">
+          <p class="eyebrow">Team leads &amp; legacy team</p>
+          <h2>Leading in the field.</h2>
+          <div class="chart-scroll leads" reveal>
+            <app-org-chart [nodes]="leads()" />
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+    }
   `,
   styles: [`
     .ceo { display: grid; grid-template-columns: .9fr 1.1fr; gap: clamp(2rem, 6vw, 5rem); align-items: center; }
@@ -87,40 +75,42 @@ import { AvatarComponent } from '../../shared/avatar.component';
     figcaption strong { font: 800 1.1rem/1.2 var(--font-display); color: var(--purple); }
     figcaption span { color: var(--muted); font-size: .9rem; }
 
-    .tree { position: relative; display: grid; gap: 3rem; justify-items: center; }
-    .tier { display: flex; flex-wrap: wrap; justify-content: center; gap: 2rem 4rem; position: relative; }
-    .tier + .tier::before, .enumerators::before {
-      content: ''; position: absolute; left: 50%; top: -3rem; width: 2px; height: 2.4rem; background: var(--purple); opacity: .35;
-    }
-    .person { display: grid; justify-items: center; text-align: center; gap: .35rem; width: 220px; }
-    .person app-avatar { margin-bottom: .6rem; }
-    .person strong, .lead-card strong { font: 800 1rem/1.25 var(--font-display); color: var(--purple); }
-    .person span, .lead-card span { color: var(--ink-soft); font-size: .9rem; }
+    /* Wide charts scroll sideways instead of squashing. */
+    .chart-scroll { overflow-x: auto; padding: 1rem 0 1.5rem; }
+    .chart-scroll app-org-chart { min-width: max-content; margin-inline: auto; }
+    .leads { margin-top: 1.5rem; }
+
     .enumerators {
-      position: relative; display: grid; gap: .3rem; text-align: center; max-width: 560px;
+      position: relative; display: grid; gap: .3rem; text-align: center; max-width: 560px; margin: 1.5rem auto 0;
       padding: 1.4rem 2rem; border-radius: var(--radius); border: 2px solid var(--purple); background: #fff;
     }
     .enumerators strong { font: 800 1.3rem/1.2 var(--font-display); color: var(--purple); }
     .enumerators span { color: var(--ink-soft); }
 
-    .leads { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.2rem; margin-top: 2rem; }
-    .lead-card { display: grid; justify-items: center; text-align: center; gap: .35rem; padding: 2rem 1rem; border-radius: var(--radius); border: 1px solid var(--line); background: #fff; transition: transform .4s var(--ease), box-shadow .4s var(--ease); }
-    .lead-card:hover { transform: translateY(-6px); box-shadow: var(--shadow); }
-    .lead-card app-avatar { margin-bottom: .8rem; }
-
     @media (max-width: 860px) {
       .ceo { grid-template-columns: 1fr; }
-      .tier { gap: 2rem; }
+    }
+    @media (max-width: 760px) {
+      .chart-scroll app-org-chart { min-width: 0; }
     }
   `],
 })
-export class TeamComponent {
+export class TeamComponent implements OnInit {
+  private content = inject(ContentService);
+
   readonly ceo = CEO;
-  readonly management = MANAGEMENT;
-  readonly fieldLeads = FIELD_LEADS;
-  readonly teamLeads = TEAM_LEADS;
+  readonly management = signal<TeamNode[]>([]);
+  readonly leads = signal<TeamNode[]>([]);
+  readonly loading = signal(true);
 
   constructor() {
     inject(SeoService).set('Team', 'Meet Hakeem Bishi and the DevHub management, field and team leads.');
+  }
+
+  async ngOnInit(): Promise<void> {
+    const members = await this.content.team();
+    this.management.set(buildTeamTree(members, 'management'));
+    this.leads.set(buildTeamTree(members, 'leads'));
+    this.loading.set(false);
   }
 }

@@ -1,4 +1,4 @@
-import type { GalleryItem, Project, SiteSettings } from '../core/models';
+import type { GalleryItem, Project, SiteSettings, TeamMember } from '../core/models';
 
 // Copy that changes rarely lives here; anything admins edit lives in Supabase.
 
@@ -125,30 +125,23 @@ export const CEO = {
   ],
 };
 
-export interface Person {
-  name: string;
-  role: string;
-}
-
-export const MANAGEMENT: Person[] = [
-  { name: 'Sodiq Onigbokun', role: 'Business / Research Operations Manager' },
-  { name: 'Omowunmi Folajimi-Senjobi', role: 'Research Manager' },
-];
-
-export const FIELD_LEADS: Person[] = [
-  { name: 'Yusuf Akinkunmi', role: 'Field Supervisor' },
-  { name: 'Anibijuwon Beatrice', role: 'Field Manager' },
-  { name: 'Omotayo Kehinde', role: 'Field Supervisor' },
-];
-
-export const TEAM_LEADS: Person[] = [
-  { name: 'Ekene Isichei', role: 'Team Lead' },
-  { name: 'Susandorcas Obalade', role: 'Team Lead' },
-  { name: 'Opeyemi Balogun', role: 'Team Lead' },
-  { name: 'Kehinde Mukaila', role: 'Team Lead' },
-];
-
 // ─── Fallbacks: shown only if the database cannot be reached ───────────────
+
+// Mirrors the starter chart in supabase/002_team_and_notifications.sql.
+export const FALLBACK_TEAM: TeamMember[] = (
+  [
+    ['1', 'Hakeem Bishi', 'Principal Consultant', 'management', null],
+    ['2', 'Sodiq Onigbokun', 'Business / Research Operations Manager', 'management', '1'],
+    ['3', 'Omowunmi Folajimi-Senjobi', 'Research Manager', 'management', '1'],
+    ['4', 'Yusuf Akinkunmi', 'Field Supervisor', 'management', '2'],
+    ['5', 'Anibijuwon Beatrice', 'Field Manager', 'management', '2'],
+    ['6', 'Omotayo Kehinde', 'Field Supervisor', 'management', '2'],
+    ['7', 'Ekene Isichei', 'Team Lead', 'leads', null],
+    ['8', 'Susandorcas Obalade', 'Team Lead', 'leads', null],
+    ['9', 'Opeyemi Balogun', 'Team Lead', 'leads', null],
+    ['10', 'Kehinde Mukaila', 'Team Lead', 'leads', null],
+  ] as const
+).map(([id, name, role, team, parent_id], i) => ({ id, name, role, team, parent_id, photo_url: null, sort_order: i }));
 
 export const DEFAULT_SETTINGS: SiteSettings = {
   contact: {

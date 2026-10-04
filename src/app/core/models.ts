@@ -66,6 +66,23 @@ export interface SiteSettings {
   stats: Stat[];
 }
 
+export type TeamChart = 'management' | 'leads';
+
+export interface TeamMember {
+  id: string;
+  name: string;
+  role: string;
+  photo_url: string | null;
+  team: TeamChart;
+  parent_id: string | null;
+  sort_order: number;
+}
+
+export interface TeamNode {
+  member: TeamMember;
+  children: TeamNode[];
+}
+
 export interface ContactMessage {
   id: string;
   name: string;

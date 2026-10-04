@@ -1,12 +1,12 @@
 import { Component, EventEmitter, Input, Output, inject, signal } from '@angular/core';
-import { ContentService } from '../../data/content.service';
+import { ContentService, UploadFolder } from '../../data/content.service';
 
 /** Cover-image picker: drop or choose a file, it uploads and emits the URL. */
 @Component({
   selector: 'app-image-field',
   standalone: true,
   template: `
-    <div class="drop" [class.over]="over()" (dragover)="$event.preventDefault(); over.set(true)" (dragleave)="over.set(false)" (drop)="onDrop($event)">
+    <div class="drop" [class.over]="over()" [class.round]="round" (dragover)="$event.preventDefault(); over.set(true)" (dragleave)="over.set(false)" (drop)="onDrop($event)">
       @if (value) {
         <img [src]="value" alt="Cover preview" />
       } @else {
@@ -22,6 +22,8 @@ import { ContentService } from '../../data/content.service';
   `,
   styles: [`
     .drop { position: relative; aspect-ratio: 16 / 10; border: 2px dashed var(--lavender); border-radius: var(--radius-sm); overflow: hidden; display: grid; place-items: center; background: var(--lavender-50); transition: border-color .2s, background .2s; }
+    .drop.round { aspect-ratio: 1; width: 140px; border-radius: 50%; }
+    .drop.round .ph { font-size: .75rem; }
     .drop.over { border-color: var(--purple-500); background: #fff; }
     .drop img { width: 100%; height: 100%; object-fit: cover; }
     .ph { color: var(--muted); font-size: .88rem; text-align: center; padding: 1rem; }
@@ -32,7 +34,8 @@ import { ContentService } from '../../data/content.service';
 })
 export class ImageFieldComponent {
   @Input() value: string | null = null;
-  @Input() folder: 'posts' | 'projects' | 'gallery' = 'posts';
+  @Input() folder: UploadFolder = 'posts';
+  @Input() round = false;
   @Output() valueChange = new EventEmitter<string | null>();
 
   private content = inject(ContentService);

@@ -1,11 +1,15 @@
 import { Injectable } from '@angular/core';
 import { MEDIA_BUCKET, supabase } from '../core/supabase';
-import type { ContactMessage, GalleryItem, Post, Project, SiteSettings } from '../core/models';
-import { DEFAULT_SETTINGS, FALLBACK_GALLERY, FALLBACK_PROJECTS } from './site-content';
+import type { ContactMessage, GalleryItem, Post, Project, SiteSettings, TeamMember } from '../core/models';
+import { DEFAULT_SETTINGS, FALLBACK_GALLERY, FALLBACK_PROJECTS, FALLBACK_TEAM } from './site-content';
 import { compressImage } from '../shared/image';
 
 export type PostInput = Omit<Post, 'id' | 'created_at' | 'updated_at'>;
 export type ProjectInput = Omit<Project, 'id' | 'created_at' | 'updated_at'>;
+export type TeamMemberInput = Omit<TeamMember, 'id'>;
+export type UploadFolder = 'posts' | 'projects' | 'gallery' | 'team';
+
+const TEAM_COLUMNS = 'id, name, role, photo_url, team, parent_id, sort_order';
 export interface ContactInput {
   name: string;
   email: string;
@@ -60,6 +64,11 @@ export class ContentService {
   async gallery(): Promise<GalleryItem[]> {
     const { data, error } = await supabase.from('gallery_items').select('*').order('sort_order');
     return error ? FALLBACK_GALLERY : (data as GalleryItem[]);
+  }
+
+  async team(): Promise<TeamMember[]> {
+    const { data, error } = await supabase.from('team_members').select(TEAM_COLUMNS).order('sort_order');
+    return error ? FALLBACK_TEAM : (data as TeamMember[]);
   }
 
   settings(): Promise<SiteSettings> {
@@ -145,6 +154,40 @@ export class ContentService {
     await this.removeUpload(item.image_url);
   }
 
+  // ─── Admin: team ─────────────────────────────────────────────────────────
+
+  async allTeam(): Promise<TeamMember[]> {
+    return unwrap(await supabase.from('team_members').select(TEAM_COLUMNS).order('sort_order')) as TeamMember[];
+  }
+
+  async saveTeamMember(id: string | null, input: TeamMemberInput): Promise<TeamMember> {
+    const q = id
+      ? supabase.from('team_members').update(input).eq('id', id).select(TEAM_COLUMNS).single()
+      : supabase.from('team_members').insert(input).select(TEAM_COLUMNS).single();
+    return unwrap(await q) as TeamMember;
+  }
+
+  async setTeamOrder(id: string, sort_order: number): Promise<void> {
+    unwrap(await supabase.from('team_members').update({ sort_order }).eq('id', id));
+  }
+
+  /** People who reported to this person move up to report to their manager (handled in the database). */
+  async deleteTeamMember(member: TeamMember): Promise<void> {
+    unwrap(await supabase.from('team_members').delete().eq('id', member.id));
+    await this.removeUpload(member.photo_url);
+  }
+
+  // ─── Admin: email alerts ─────────────────────────────────────────────────
+
+  async alertsEnabled(userId: string): Promise<boolean> {
+    const row = unwrap(await supabase.from('admins').select('notify').eq('user_id', userId).single()) as { notify: boolean };
+    return row.notify;
+  }
+
+  async setAlertsEnabled(userId: string, notify: boolean): Promise<void> {
+    unwrap(await supabase.from('admins').update({ notify }).eq('user_id', userId));
+  }
+
   // ─── Admin: settings & messages ──────────────────────────────────────────
 
   async saveSetting<K extends keyof SiteSettings>(key: K, value: SiteSettings[K]): Promise<void> {
@@ -185,7 +228,7 @@ export class ContentService {
   // ─── Admin: uploads ──────────────────────────────────────────────────────
 
   /** Compresses an image in the browser, uploads it and returns its public URL. */
-  async uploadImage(file: File, folder: 'posts' | 'projects' | 'gallery'): Promise<string> {
+  async uploadImage(file: File, folder: UploadFolder): Promise<string> {
     const blob = await compressImage(file);
     const ext = blob.type === 'image/png' ? 'png' : blob.type === 'image/gif' ? 'gif' : 'jpg';
     const path = `${folder}/${Date.now()}-${crypto.randomUUID().slice(0, 8)}.${ext}`;
