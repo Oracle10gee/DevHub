@@ -9,7 +9,11 @@ export type ProjectInput = Omit<Project, 'id' | 'created_at' | 'updated_at'>;
 export type TeamMemberInput = Omit<TeamMember, 'id'>;
 export type UploadFolder = 'posts' | 'projects' | 'gallery' | 'team';
 
-const TEAM_COLUMNS = 'id, name, role, photo_url, team, parent_id, sort_order';
+// `bio` arrives with supabase/003_team_bio.sql; default it so the site works before that runs.
+function toMember(row: Partial<TeamMember>): TeamMember {
+  return { ...(row as TeamMember), bio: row.bio ?? '' };
+}
+
 export interface ContactInput {
   name: string;
   email: string;
@@ -67,8 +71,8 @@ export class ContentService {
   }
 
   async team(): Promise<TeamMember[]> {
-    const { data, error } = await supabase.from('team_members').select(TEAM_COLUMNS).order('sort_order');
-    return error ? FALLBACK_TEAM : (data as TeamMember[]);
+    const { data, error } = await supabase.from('team_members').select('*').order('sort_order');
+    return error ? FALLBACK_TEAM : (data as Partial<TeamMember>[]).map(toMember);
   }
 
   settings(): Promise<SiteSettings> {
@@ -157,14 +161,15 @@ export class ContentService {
   // ─── Admin: team ─────────────────────────────────────────────────────────
 
   async allTeam(): Promise<TeamMember[]> {
-    return unwrap(await supabase.from('team_members').select(TEAM_COLUMNS).order('sort_order')) as TeamMember[];
+    const rows = unwrap(await supabase.from('team_members').select('*').order('sort_order')) as Partial<TeamMember>[];
+    return rows.map(toMember);
   }
 
   async saveTeamMember(id: string | null, input: TeamMemberInput): Promise<TeamMember> {
     const q = id
-      ? supabase.from('team_members').update(input).eq('id', id).select(TEAM_COLUMNS).single()
-      : supabase.from('team_members').insert(input).select(TEAM_COLUMNS).single();
-    return unwrap(await q) as TeamMember;
+      ? supabase.from('team_members').update(input).eq('id', id).select('*').single()
+      : supabase.from('team_members').insert(input).select('*').single();
+    return toMember(unwrap(await q) as Partial<TeamMember>);
   }
 
   async setTeamOrder(id: string, sort_order: number): Promise<void> {

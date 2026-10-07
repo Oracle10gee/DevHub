@@ -34,6 +34,9 @@ npm run build      # production build in dist/dev-hub/browser
 5. **Editable team chart + message alerts.** Run [`supabase/002_team_and_notifications.sql`](supabase/002_team_and_notifications.sql)
    in the SQL Editor the same way. Then set up the email function (below).
 
+6. **Team member bios.** Run [`supabase/003_team_bio.sql`](supabase/003_team_bio.sql) the same way. It adds the
+   **About** text shown in the pop-up card on the Team page.
+
 ### Email alerts for new messages
 
 When a contact message is saved, the database calls the `notify-new-message` Edge Function, which emails every
@@ -75,7 +78,7 @@ Sign in at **`/admin`**.
 | **Posts** | Write news and field stories. Add a cover image, format the body (headings, lists, quotes, links, images), then set **Status → Published**. A future publish date schedules the post. Drafts are never visible on the site. |
 | **Projects** | Add or edit projects, including client, timeline, phases and a full write-up. **Feature on home page** adds a project to the home page timeline; untick **Visible on website** to hide it without deleting it. Use the arrows on the list to set the order. |
 | **Gallery** | Upload several photos at once, edit captions (saved when you click away), reorder with the arrows, delete. |
-| **Team** | Both organogram charts. Add a person, set their job title and photo, and choose who they **report to**. That choice sets their place in the chart. **+ Report** adds someone directly under a person; the arrows reorder colleagues who share a manager. Removing someone moves their direct reports up to that person's own manager. |
+| **Team** | Both organogram charts. Add a person, set their job title, photo and a short **About** profile, and choose who they **report to**. Visitors see the profile in a pop-up card when they hover over (or tap) that person. That choice sets their place in the chart. **+ Report** adds someone directly under a person; the arrows reorder colleagues who share a manager. Removing someone moves their direct reports up to that person's own manager. |
 | **Messages** | Enquiries from the contact form. Reply by email, mark as read, delete. |
 | **Site settings** | Your own email-alert switch, the home page headline and numbers, and the contact address, email and phone used across the site. |
 

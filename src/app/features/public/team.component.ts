@@ -1,7 +1,9 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { CEO } from '../../data/site-content';
 import { ContentService } from '../../data/content.service';
-import type { TeamNode } from '../../core/models';
+import type { TeamMember, TeamNode } from '../../core/models';
+import { TeamPeekComponent } from '../../shared/team-peek.component';
+import { TeamPeekService } from '../../shared/team-peek.service';
 import { SeoService } from '../../core/seo.service';
 import { buildTeamTree } from '../../shared/team-tree';
 import { RevealDirective } from '../../shared/reveal.directive';
@@ -11,7 +13,8 @@ import { OrgChartComponent } from '../../shared/org-chart.component';
 @Component({
   selector: 'app-team',
   standalone: true,
-  imports: [RevealDirective, LogoMarkComponent, OrgChartComponent],
+  imports: [RevealDirective, LogoMarkComponent, OrgChartComponent, TeamPeekComponent],
+  providers: [TeamPeekService],
   template: `
     <section class="page-hero">
       <app-logo-mark class="mark" [spin]="true" />
@@ -66,6 +69,8 @@ import { OrgChartComponent } from '../../shared/org-chart.component';
         </div>
       </section>
     }
+
+    <app-team-peek [members]="members()" />
   `,
   styles: [`
     .ceo { display: grid; grid-template-columns: .9fr 1.1fr; gap: clamp(2rem, 6vw, 5rem); align-items: center; }
@@ -101,6 +106,7 @@ export class TeamComponent implements OnInit {
   readonly ceo = CEO;
   readonly management = signal<TeamNode[]>([]);
   readonly leads = signal<TeamNode[]>([]);
+  readonly members = signal<TeamMember[]>([]);
   readonly loading = signal(true);
 
   constructor() {
@@ -109,6 +115,7 @@ export class TeamComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     const members = await this.content.team();
+    this.members.set(members);
     this.management.set(buildTeamTree(members, 'management'));
     this.leads.set(buildTeamTree(members, 'leads'));
     this.loading.set(false);

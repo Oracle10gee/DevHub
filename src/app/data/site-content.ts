@@ -141,7 +141,7 @@ export const FALLBACK_TEAM: TeamMember[] = (
     ['9', 'Opeyemi Balogun', 'Team Lead', 'leads', null],
     ['10', 'Kehinde Mukaila', 'Team Lead', 'leads', null],
   ] as const
-).map(([id, name, role, team, parent_id], i) => ({ id, name, role, team, parent_id, photo_url: null, sort_order: i }));
+).map(([id, name, role, team, parent_id], i) => ({ id, name, role, bio: '', team, parent_id, photo_url: null, sort_order: i }));
 
 export const DEFAULT_SETTINGS: SiteSettings = {
   contact: {

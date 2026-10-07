@@ -1,6 +1,7 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, inject } from '@angular/core';
 import type { TeamNode } from '../core/models';
 import { AvatarComponent } from './avatar.component';
+import { TeamPeekService } from './team-peek.service';
 
 /**
  * Draws a reporting hierarchy of any depth. Renders itself recursively for
@@ -15,7 +16,14 @@ import { AvatarComponent } from './avatar.component';
     <ul class="level" [class.nested]="nested">
       @for (n of nodes; track n.member.id) {
         <li>
-          <div class="node" [class.top]="!nested && nodes.length === 1">
+          <div class="node" [class.top]="!nested && nodes.length === 1" #card
+               tabindex="0" role="button" aria-haspopup="dialog"
+               [attr.aria-label]="'About ' + n.member.name"
+               (mouseenter)="peek?.hover(n.member, card)" (mouseleave)="peek?.leave()"
+               (focus)="peek?.hover(n.member, card)" (blur)="peek?.leave()"
+               (click)="peek?.toggle(n.member, card)"
+               (keydown.enter)="peek?.toggle(n.member, card)"
+               (keydown.space)="peek?.toggle(n.member, card); $event.preventDefault()">
             <app-avatar [name]="n.member.name" [photo]="n.member.photo_url" />
             <strong>{{ n.member.name }}</strong>
             @if (n.member.role) { <span>{{ n.member.role }}</span> }
@@ -51,6 +59,7 @@ import { AvatarComponent } from './avatar.component';
       padding: 1.1rem .8rem 1rem; border-radius: var(--radius); background: #fff;
       border: 1px solid var(--line); box-shadow: var(--shadow-sm);
       transition: transform .35s var(--ease), box-shadow .35s var(--ease);
+      cursor: pointer;
     }
     .node:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
     .node app-avatar { --size: 64px; margin-bottom: .4rem; }
@@ -73,4 +82,7 @@ import { AvatarComponent } from './avatar.component';
 export class OrgChartComponent {
   @Input({ required: true }) nodes: TeamNode[] = [];
   @Input() nested = false;
+
+  /** Present on the Team page; absent anywhere the chart is shown without pop-ups. */
+  readonly peek = inject(TeamPeekService, { optional: true });
 }

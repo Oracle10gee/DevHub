@@ -10,6 +10,7 @@ interface Draft {
   id: string | null;
   name: string;
   role: string;
+  bio: string;
   photo_url: string | null;
   parent_id: string | null;
 }
@@ -71,6 +72,12 @@ const CHARTS: { value: TeamChart; label: string; hint: string }[] = [
                 }
               </select>
               <span class="hint">This sets where they appear in the organogram.</span>
+            </div>
+            <div class="field">
+              <label for="m-bio">About</label>
+              <textarea id="m-bio" name="bio" class="input" rows="4" style="min-height: 0" maxlength="1500" [(ngModel)]="d.bio"
+                        placeholder="A short profile: background, expertise, what they do at DevHub."></textarea>
+              <span class="hint">Shown in the pop-up card when a visitor hovers over or taps this person. {{ d.bio.length }}/1500</span>
             </div>
             <div class="row-actions">
               <button class="btn btn--sm" type="submit" [disabled]="saving() || !d.name.trim()">{{ saving() ? 'Saving…' : 'Save' }}</button>
@@ -194,13 +201,13 @@ export class TeamAdminComponent implements OnInit {
 
   startAdd(parentId: string | null): void {
     this.message.set(null);
-    this.draft.set({ id: null, name: '', role: '', photo_url: null, parent_id: parentId });
+    this.draft.set({ id: null, name: '', role: '', bio: '', photo_url: null, parent_id: parentId });
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   startEdit(m: TeamMember): void {
     this.message.set(null);
-    this.draft.set({ id: m.id, name: m.name, role: m.role, photo_url: m.photo_url, parent_id: m.parent_id });
+    this.draft.set({ id: m.id, name: m.name, role: m.role, bio: m.bio, photo_url: m.photo_url, parent_id: m.parent_id });
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
@@ -215,6 +222,7 @@ export class TeamAdminComponent implements OnInit {
       const input: TeamMemberInput = {
         name: d.name.trim(),
         role: d.role.trim(),
+        bio: d.bio.trim(),
         photo_url: d.photo_url,
         team: this.chart(),
         parent_id: d.parent_id,
@@ -298,6 +306,12 @@ export class TeamAdminComponent implements OnInit {
   }
 
   private fail(e: unknown): void {
-    this.message.set({ ok: false, text: e instanceof Error ? e.message : String(e) });
+    const text = e instanceof Error ? e.message : String(e);
+    this.message.set({
+      ok: false,
+      text: text.includes("'bio'")
+        ? 'The About field needs a one-time database update: run supabase/003_team_bio.sql in the Supabase SQL Editor, then save again.'
+        : text,
+    });
   }
 }
