@@ -22,6 +22,7 @@ export interface Project {
   title: string;
   client: string;
   client_detail: string;
+  funder: string;
   period_label: string;
   status: ProjectStatus;
   phases: string[];

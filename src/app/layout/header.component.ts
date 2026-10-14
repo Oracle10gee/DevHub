@@ -6,7 +6,7 @@ const LINKS = [
   { path: '/about', label: 'About' },
   { path: '/services', label: 'Services' },
   { path: '/projects', label: 'Projects' },
-  { path: '/team', label: 'Team' },
+  { path: '/people', label: 'People' },
   { path: '/insights', label: 'Insights' },
   { path: '/gallery', label: 'Gallery' },
 ];

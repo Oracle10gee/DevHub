@@ -48,10 +48,10 @@ type Filter = 'all' | 'ongoing' | 'completed';
                   <span class="chip status" [class.chip--live]="p.status === 'ongoing'">{{ p.status === 'ongoing' ? 'Ongoing' : 'Completed' }}</span>
                 </div>
                 <div class="card-body">
-                  <p class="period">{{ p.period_label }}</p>
+                  <p class="period">{{ p.period_label }}@if (p.funder) { · Funder: {{ p.funder }}}</p>
                   <h3>{{ p.title }}</h3>
                   <p class="muted">{{ p.summary }}</p>
-                  <p class="client"><span>Client</span> {{ p.client }}</p>
+                  <p class="client"><span>Client(s) / PI(s)</span> {{ p.client }}</p>
                 </div>
               </a>
             } @empty {

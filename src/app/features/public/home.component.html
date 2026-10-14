@@ -148,12 +148,12 @@
       <a class="band" [routerLink]="['/projects', p.slug]" [style.--band]="bandColors[i % bandColors.length]" reveal>
         <div class="container band-inner">
           <div class="band-client">
-            <small>{{ p.client_detail ? 'Client / PI' : 'Client' }}</small>
+            <small>{{ p.client_detail ? 'Client(s) / PI(s)' : 'Client(s)' }}</small>
             <strong>{{ p.client }}</strong>
           </div>
           <div class="band-title">
             <h3>{{ p.title }}</h3>
-            <span class="band-period">{{ p.period_label }}</span>
+            <span class="band-period">{{ p.period_label }}@if (p.funder) { · Funder: {{ p.funder }}}</span>
           </div>
           @if (p.cover_url) {
             <img class="band-thumb" [src]="p.cover_url" alt="" loading="lazy" />

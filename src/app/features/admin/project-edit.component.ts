@@ -33,13 +33,18 @@ import { ImageFieldComponent } from './image-field.component';
             </div>
             <div class="adm-grid-2">
               <div class="field">
-                <label for="client">Client / PI</label>
+                <label for="client">Client(s) / PI(s)</label>
                 <input id="client" name="client" class="input" [(ngModel)]="model.client" />
               </div>
               <div class="field">
                 <label for="period">Timeline label</label>
                 <input id="period" name="period" class="input" [(ngModel)]="model.period_label" placeholder="Summer 2026 – ongoing" />
               </div>
+            </div>
+            <div class="field">
+              <label for="funder">Funder</label>
+              <input id="funder" name="funder" class="input" [(ngModel)]="model.funder" placeholder="J-PAL / MIT" />
+              <span class="hint">Shown next to the timeline on the website. Leave empty to hide.</span>
             </div>
             <div class="field">
               <label for="detail">Client title &amp; institution</label>
@@ -112,7 +117,7 @@ export class ProjectEditComponent implements OnInit {
   private router = inject(Router);
 
   model: ProjectInput = {
-    slug: '', title: '', client: '', client_detail: '', period_label: '', status: 'ongoing', phases: [],
+    slug: '', title: '', client: '', client_detail: '', funder: '', period_label: '', status: 'ongoing', phases: [],
     summary: '', body: '', cover_url: null, featured: false, published: true, sort_order: 0,
   };
   phases = '';

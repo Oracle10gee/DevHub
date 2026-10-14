@@ -16,8 +16,7 @@ interface Draft {
 }
 
 const CHARTS: { value: TeamChart; label: string; hint: string }[] = [
-  { value: 'management', label: 'Management organogram', hint: 'The main chart on the Team page, from the Principal Consultant down.' },
-  { value: 'leads', label: 'Team leads & legacy team', hint: 'The second chart on the Team page. Add team members under each lead.' },
+  { value: 'management', label: 'Management organogram', hint: 'The organogram on the People page, from the Principal Consultant down.' },
 ];
 
 @Component({
@@ -28,11 +27,12 @@ const CHARTS: { value: TeamChart; label: string; hint: string }[] = [
     <div class="adm-head">
       <h1>Team</h1>
       <div class="adm-actions">
-        <a href="/team" target="_blank" rel="noopener" class="btn btn--sm btn--ghost">View page ↗</a>
+        <a href="/people" target="_blank" rel="noopener" class="btn btn--sm btn--ghost">View page ↗</a>
         <button type="button" class="btn btn--sm" (click)="startAdd(null)">+ Add person</button>
       </div>
     </div>
 
+    @if (charts.length > 1) {
     <div class="tabs" role="tablist">
       @for (c of charts; track c.value) {
         <button type="button" role="tab" [attr.aria-selected]="chart() === c.value" [class.on]="chart() === c.value" (click)="switchChart(c.value)">
@@ -40,6 +40,7 @@ const CHARTS: { value: TeamChart; label: string; hint: string }[] = [
         </button>
       }
     </div>
+    }
     <p class="muted hint">{{ chartHint() }}</p>
 
     @if (message(); as m) { <div class="adm-msg" [class.ok]="m.ok" [class.err]="!m.ok">{{ m.text }}</div> }

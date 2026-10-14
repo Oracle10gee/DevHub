@@ -17,7 +17,7 @@ import { LogoMarkComponent } from '../../shared/logo-mark.component';
       <div class="container">
         <p class="eyebrow" reveal>Insights</p>
         <h1 reveal [revealDelay]="80">Notes from <span class="text-gradient">the field.</span></h1>
-        <p class="lead" reveal [revealDelay]="160">Project updates, field stories and how we approach research and data.</p>
+        <p class="lead" reveal [revealDelay]="160">Watch this space for more news, events and activities from DevHub Research Limited, along with project updates, field stories and how we approach research and data.</p>
       </div>
     </section>
 

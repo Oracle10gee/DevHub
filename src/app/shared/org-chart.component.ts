@@ -42,7 +42,7 @@ import { TeamPeekService } from './team-peek.service';
     .level.nested::before {
       content: ''; position: absolute; top: 0; left: 50%; height: var(--gap); border-left: 2px solid var(--line);
     }
-    li { position: relative; display: flex; flex-direction: column; align-items: center; padding: var(--gap) 10px 0; }
+    li { position: relative; display: flex; flex-direction: column; align-items: center; padding: var(--gap) 6px 0; }
     li::before, li::after {
       content: ''; position: absolute; top: 0; right: 50%; width: 50%; height: var(--gap); border-top: 2px solid var(--line);
     }
@@ -55,18 +55,18 @@ import { TeamPeekService } from './team-peek.service';
     .level:not(.nested) > li:only-child { padding-top: 0; }
 
     .node {
-      display: grid; justify-items: center; text-align: center; gap: .3rem; width: 190px;
-      padding: 1.1rem .8rem 1rem; border-radius: var(--radius); background: #fff;
+      display: grid; justify-items: center; text-align: center; gap: .25rem; width: 158px;
+      padding: .9rem .65rem .8rem; border-radius: var(--radius); background: #fff;
       border: 1px solid var(--line); box-shadow: var(--shadow-sm);
       transition: transform .35s var(--ease), box-shadow .35s var(--ease);
       cursor: pointer;
     }
     .node:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
-    .node app-avatar { --size: 64px; margin-bottom: .4rem; }
-    .node.top { width: 220px; border-color: var(--purple); }
-    .node.top app-avatar { --size: 88px; }
-    strong { font: 800 .95rem/1.25 var(--font-display); color: var(--purple); }
-    span { color: var(--ink-soft); font-size: .82rem; line-height: 1.35; }
+    .node app-avatar { --size: 52px; margin-bottom: .3rem; }
+    .node.top { width: 190px; border-color: var(--purple); }
+    .node.top app-avatar { --size: 72px; }
+    strong { font: 800 .88rem/1.25 var(--font-display); color: var(--purple); }
+    span { color: var(--ink-soft); font-size: .76rem; line-height: 1.35; }
 
     @media (max-width: 760px) {
       .level, .level.nested { display: block; padding: 0; }

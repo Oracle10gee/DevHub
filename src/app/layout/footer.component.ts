@@ -28,7 +28,7 @@ import { LogoMarkComponent } from '../shared/logo-mark.component';
             <a routerLink="/about">About</a>
             <a routerLink="/services">Services</a>
             <a routerLink="/projects">Projects</a>
-            <a routerLink="/team">Team</a>
+            <a routerLink="/people">People</a>
             <a routerLink="/insights">Insights</a>
             <a routerLink="/gallery">Gallery</a>
           </div>
@@ -42,7 +42,7 @@ import { LogoMarkComponent } from '../shared/logo-mark.component';
 
         <div class="legal">
           <span>© {{ year }} DevHub Research Limited. All rights reserved.</span>
-          <span>Registered under Nigerian data protection regulation · PENCOM registered</span>
+          <span>RC 1495394 · NDPC registered data controller &amp; processor · PENCOM registered</span>
         </div>
       </div>
     </footer>

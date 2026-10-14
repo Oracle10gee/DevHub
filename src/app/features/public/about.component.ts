@@ -1,6 +1,6 @@
-import { Component, inject } from '@angular/core';
+import { Component, HostListener, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { ABOUT, CODES, COMPLIANCE, EXPECTATIONS, FOCUS_AREAS } from '../../data/site-content';
+import { ABOUT, CERTIFICATES, CODES, COMPLIANCE, CORE_VALUES, FOCUS_AREAS } from '../../data/site-content';
 import { SeoService } from '../../core/seo.service';
 import { RevealDirective } from '../../shared/reveal.directive';
 import { LogoMarkComponent } from '../../shared/logo-mark.component';
@@ -23,7 +23,7 @@ import { LogoMarkComponent } from '../../shared/logo-mark.component';
       <div class="container story">
         <figure reveal>
           <img src="/assets/photos/photo-01.jpeg" alt="Enumerators in a DevHub training session" loading="lazy" />
-          <figcaption>Every study starts with a trained, briefed and certified field team.</figcaption>
+          <figcaption>Training, briefing and building certified teams.</figcaption>
         </figure>
         <div>
           @for (p of about.paragraphs; track p; let i = $index) {
@@ -52,15 +52,38 @@ import { LogoMarkComponent } from '../../shared/logo-mark.component';
             </div>
           }
         </div>
+
+        <div class="certs">
+          @for (c of certificates; track c.title; let i = $index) {
+            <button type="button" class="cert" (click)="openCert.set(i)" reveal [revealDelay]="i * 90" [attr.aria-label]="'View ' + c.title">
+              <span class="cert-frame"><img [src]="c.image" [alt]="c.title" loading="lazy" /></span>
+              <span class="cert-text">
+                <strong>{{ c.title }}</strong>
+                <small>{{ c.detail }}</small>
+                <span class="cert-view">View certificate ↗</span>
+              </span>
+            </button>
+          }
+        </div>
       </div>
     </section>
 
+    @if (openCert() !== null) {
+      <div class="lightbox" role="dialog" aria-modal="true" [attr.aria-label]="certificates[openCert()!].title" (click)="openCert.set(null)">
+        <button type="button" class="lb-close" (click)="openCert.set(null)" aria-label="Close">✕</button>
+        <figure (click)="$event.stopPropagation()">
+          <img [src]="certificates[openCert()!].image" [alt]="certificates[openCert()!].title" />
+          <figcaption>{{ certificates[openCert()!].title }} · {{ certificates[openCert()!].detail }}</figcaption>
+        </figure>
+      </div>
+    }
+
     <section class="values">
       <div class="half light">
-        <p class="ghost-title" aria-hidden="true">our expectations</p>
-        <h2 class="sr-only">Our expectations</h2>
+        <p class="ghost-title" aria-hidden="true">core values</p>
+        <h2 class="sr-only">Core values and expectations</h2>
         <ul>
-          @for (e of expectations; track e; let i = $index) {
+          @for (e of coreValues; track e; let i = $index) {
             <li reveal [revealDelay]="i * 50">{{ e }}</li>
           }
         </ul>
@@ -80,7 +103,7 @@ import { LogoMarkComponent } from '../../shared/logo-mark.component';
     <section class="section">
       <div class="container next">
         <h2>Meet the people behind the data.</h2>
-        <a routerLink="/team" class="btn">Our team <span class="arrow">→</span></a>
+        <a routerLink="/people" class="btn">Our people <span class="arrow">→</span></a>
       </div>
     </section>
   `,
@@ -96,6 +119,27 @@ import { LogoMarkComponent } from '../../shared/logo-mark.component';
     .tick { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 12px; background: var(--purple); color: #fff; font-weight: 800; margin-bottom: 1.2rem; }
     .comp h3 { font-size: 1.1rem; }
     .comp p { color: var(--ink-soft); font-size: .93rem; margin: 0; }
+
+    .certs { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); gap: 1.2rem; margin-top: 2rem; position: relative; }
+    .cert {
+      display: grid; grid-template-columns: 160px 1fr; gap: 1.4rem; align-items: center; text-align: left;
+      padding: 1.1rem; border-radius: var(--radius-lg); border: 1px solid var(--line); background: #fff; cursor: zoom-in;
+      transition: transform .4s var(--ease), box-shadow .4s var(--ease);
+    }
+    .cert:hover { transform: translateY(-5px); box-shadow: var(--shadow); }
+    .cert-frame { display: block; aspect-ratio: 4 / 3.2; border-radius: 12px; overflow: hidden; background: var(--lavender-50); box-shadow: inset 0 0 0 1px var(--line); }
+    .cert-frame img { width: 100%; height: 100%; object-fit: contain; }
+    .cert-text { display: grid; gap: .35rem; }
+    .cert-text strong { font: 800 1.05rem/1.25 var(--font-display); color: var(--purple); }
+    .cert-text small { color: var(--ink-soft); font-size: .86rem; }
+    .cert-view { margin-top: .4rem; font: 700 .85rem/1 var(--font-display); color: var(--blue); }
+    .lightbox { position: fixed; inset: 0; z-index: 100; display: grid; place-items: center; padding: 2rem; background: rgb(18 4 38 / .92); animation: fade .25s; }
+    @keyframes fade { from { opacity: 0; } }
+    .lightbox figure { position: static; margin: 0; display: grid; justify-items: center; gap: 1rem; }
+    .lightbox img { max-height: 84vh; width: auto; max-width: 100%; border-radius: 8px; aspect-ratio: auto; object-fit: contain; box-shadow: 0 30px 80px rgb(0 0 0 / .5); }
+    .lightbox figcaption { color: #fff; text-align: center; margin: 0; }
+    .lb-close { position: absolute; top: 1.2rem; right: 1.2rem; width: 48px; height: 48px; border-radius: 50%; border: 0; background: rgb(255 255 255 / .14); color: #fff; font-size: 1.1rem; cursor: pointer; }
+    @media (max-width: 520px) { .cert { grid-template-columns: 1fr; } }
 
     .values { display: grid; grid-template-columns: 1fr 1fr; }
     .half { position: relative; overflow: hidden; padding: clamp(4rem, 8vw, 7rem) clamp(1.5rem, 6vw, 6rem); }
@@ -122,10 +166,17 @@ export class AboutComponent {
   readonly about = ABOUT;
   readonly focusAreas = FOCUS_AREAS;
   readonly compliance = COMPLIANCE;
-  readonly expectations = EXPECTATIONS;
+  readonly coreValues = CORE_VALUES;
+  readonly certificates = CERTIFICATES;
+  readonly openCert = signal<number | null>(null);
   readonly codes = CODES;
 
   constructor() {
     inject(SeoService).set('About', ABOUT.lead);
+  }
+
+  @HostListener('document:keydown.escape')
+  closeCert(): void {
+    this.openCert.set(null);
   }
 }

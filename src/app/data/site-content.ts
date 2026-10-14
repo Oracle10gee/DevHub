@@ -4,7 +4,7 @@ import type { GalleryItem, Project, SiteSettings, TeamMember } from '../core/mod
 
 export const ABOUT = {
   lead:
-    'DevHub is a research and data consulting firm specialising in end-to-end field research management, data collection and analysis.',
+    'DevHub Research Limited is a research and data consulting firm specialising in end-to-end field research management, data collection and analysis.',
   paragraphs: [
     'We provide expert services in research design, survey programming, digital and in-person data collection, focus group facilitation and secondary data sourcing. Our technical capabilities include developing research tools, recruiting and training field teams, and managing field logistics across complex project environments.',
     'We support organisations ranging from academic institutions and international development partners to policy agencies and private firms in generating high-quality, reliable data for programme design, impact evaluations and policy analysis.',
@@ -31,45 +31,54 @@ export const EXPERTISE: Expertise[] = [
     title: 'Academic Research',
     icon: 'academic',
     color: '#300066',
-    blurb: 'Field partners for faculty and doctoral researchers at universities in North America, Europe and Africa.',
-    points: ['Survey and panel studies', 'Pilots, baselines and follow-ups', 'IRB-aligned ethical protocols'],
+    blurb:
+      'We partner with faculty, doctoral and post-doctoral researchers from across the world to implement their field research projects in West Africa.',
+    points: [
+      'Collaborate on grant applications',
+      'Support global and local IRB / ethics approval',
+      'Implement rigorous data collection and management',
+      'Responsible grant funds management and reporting',
+    ],
   },
   {
-    slug: 'market-surveys',
-    title: 'Market Surveys',
-    icon: 'market',
+    slug: 'research-design',
+    title: 'Research Design',
+    icon: 'design',
     color: '#4f8db3',
-    blurb: 'Reliable data on traders, consumers and supply chains in fast-moving urban markets.',
-    points: ['Trader and enterprise surveys', 'Supply-chain mapping', 'Sampling in informal markets'],
+    blurb: 'From research question to field-ready instrument, built to survive real conditions.',
+    points: ['Questionnaire and tool development', 'Survey programming (CAPI / CATI)', 'Sampling strategy and implementation'],
   },
   {
     slug: 'policy-research',
     title: 'Policy Research',
     icon: 'policy',
     color: '#0a9fd8',
-    blurb: 'Evidence for programme design, impact evaluation and urban policy.',
-    points: ['Impact evaluation fieldwork', 'Urban governance studies', 'Stakeholder and focus group sessions'],
-  },
-  {
-    slug: 'research-design',
-    title: 'Research Design',
-    icon: 'design',
-    color: '#1e73be',
-    blurb: 'From research question to field-ready instrument, built to survive real conditions.',
-    points: ['Questionnaire and tool development', 'Survey programming (CAPI / CATI)', 'Sampling strategy'],
+    blurb: 'Evidence for programme design, impact evaluation and policy development.',
+    points: ['Impact evaluation design', 'Impact evaluation fieldwork', 'Stakeholder and focus group sessions'],
   },
   {
     slug: 'data-management',
     title: 'Data Management',
     icon: 'data',
+    color: '#1e73be',
+    blurb:
+      'Rigorous, reproducible and scientific data cleaning, and secure data storage, handled in compliance with the Nigeria Data Protection Act.',
+    points: ['Reproducible data cleaning', 'Secure data storage', 'Compliance with the Nigeria Data Protection Act'],
+  },
+  {
+    slug: 'market-surveys',
+    title: 'Market Surveys',
+    icon: 'market',
     color: '#2b3990',
-    blurb: 'Clean, documented and secure datasets, handled under Nigerian data-protection rules.',
-    points: ['Real-time quality control', 'Cleaning, coding and documentation', 'Secondary data sourcing'],
+    blurb:
+      'We partner with businesses and brands to help them understand their operational advantage in the market and make decisions for their business.',
+    points: ['Product testing', 'Competitor research'],
   },
 ];
 
 export const SERVICES = [
   { title: 'Research design', text: 'Framing questions, choosing methods and building sampling strategies that hold up in the field.' },
+  { title: 'Research grant management', text: 'Grant writing support, and responsible management and reporting of research grant funds.' },
   { title: 'Survey programming', text: 'Digital instruments for tablet, phone and web collection, with logic checks built in.' },
   { title: 'Data collection', text: 'Digital and in-person collection by trained, ethically certified enumerators.' },
   { title: 'Focus group facilitation', text: 'Moderated discussions and key-informant interviews with careful documentation.' },
@@ -87,14 +96,32 @@ export const PROCESS = [
 ];
 
 export const COMPLIANCE = [
-  { title: 'Data protection registered', text: 'Registered under Nigerian data protection regulation.' },
-  { title: 'Data protection policies', text: 'Operational policies governing how data is collected, stored and shared.' },
+  {
+    title: 'Registered data controller and processor',
+    text: 'Registered with the Nigeria Data Protection Commission (NDPC) as a data controller and processor of major importance.',
+  },
+  {
+    title: 'Corporate governance policies',
+    text: 'Whistleblowing, anti-fraud and anti-money-laundering policies guide how we work.',
+  },
   { title: 'Ethically certified enumerators', text: 'Every enumerator completes research ethics certification.' },
   { title: 'PENCOM registered', text: 'Registered with the National Pension Commission.' },
-  { title: 'Staff pensions', text: 'Pension contributions maintained for our team.' },
 ];
 
-export const EXPECTATIONS = ['Professionalism', 'Honesty', 'Timeliness', 'Teamwork', 'Respect', 'Accountability', 'Initiative'];
+export const CERTIFICATES = [
+  {
+    title: 'NDPC Certificate of Registration',
+    detail: 'Registration ID NDPC/DCP/04680 · valid 07/09/2025 to 07/09/2027',
+    image: '/assets/compliance/ndpc-certificate.png',
+  },
+  {
+    title: 'CAC Certificate of Incorporation',
+    detail: 'RC 1495394 · incorporated 16 May 2018',
+    image: '/assets/compliance/cac-certificate.jpg',
+  },
+];
+
+export const CORE_VALUES = ['Integrity', 'Accountability', 'Teamwork', 'Creativity', 'Respect'];
 
 export const CODES = [
   'Research ethics',
@@ -112,16 +139,16 @@ export const PARTNERS = [
   'Concordia University',
   'Uppsala University',
   'Lagos Business School',
-  'Lagos State Government',
 ];
 
 export const CEO = {
   name: 'Hakeem Bishi',
   role: 'Principal Consultant / CEO',
   photo: '/assets/photos/photo-02.jpeg',
+  profileUrl: 'https://hakeembishi.com/',
   bio: [
     'Hakeem Bishi is an urban planner, researcher and data specialist with over 15 years of experience in urban development, policy research and evidence-based planning. He is a PhD candidate in Geography, Urban and Environmental Studies at Concordia University, Montreal, and leads research design, data coordination and urban analytics at DevHub for development-focused projects across Nigeria.',
-    'Hakeem combines academic depth with hands-on field experience. He has led high-impact studies such as the Lagos Trader Project, contributed to strategic urban initiatives like the Kosofe Model City Plan, and collaborated with MIT, Dartmouth, Stanford and the Lagos State Government on urban governance, market redevelopment and the dynamics of informal economies in African cities.',
+    'Hakeem combines academic depth with hands-on field experience. He has led high-impact studies such as the Lagos Trader Project, contributed to strategic urban initiatives like the Kosofe Model City Plan, and collaborated with principal investigators from MIT, Dartmouth and Stanford on urban governance, market redevelopment and the dynamics of informal economies in African cities.',
   ],
 };
 
@@ -158,7 +185,7 @@ export const DEFAULT_SETTINGS: SiteSettings = {
   stats: [
     { value: 15, suffix: '+', label: 'Years of research leadership' },
     { value: 6, suffix: '', label: 'Major field studies delivered' },
-    { value: 30, suffix: '+', label: 'Trained field researchers' },
+    { value: 55, suffix: '+', label: 'Trained field researchers' },
     { value: 4, suffix: '', label: 'Countries of partner institutions' },
   ],
 };
@@ -168,6 +195,7 @@ function project(p: Partial<Project> & Pick<Project, 'slug' | 'title'>): Project
     id: p.slug,
     client: '',
     client_detail: '',
+    funder: '',
     period_label: '',
     status: 'completed',
     phases: [],
@@ -190,6 +218,7 @@ export const FALLBACK_PROJECTS: Project[] = [
     client: 'Meredith Startz',
     client_detail: 'Assistant Professor of Economics, Department of Economics, Dartmouth College, USA',
     period_label: 'Summer 2026 – ongoing',
+    funder: 'Private Enterprise Development in Low-Income Countries (PEDL) / Dartmouth College',
     status: 'ongoing',
     summary: 'Field research management and data collection for a study of supply chains, led by Professor Meredith Startz of Dartmouth College.',
     cover_url: '/assets/photos/photo-06.jpeg',
@@ -212,6 +241,7 @@ export const FALLBACK_PROJECTS: Project[] = [
     client: 'Jared Simon Kalow',
     client_detail: 'Doctoral Candidate, Department of Political Science, Massachusetts Institute of Technology',
     period_label: 'Fall 2024 – Winter 2025',
+    funder: 'J-PAL / MIT',
     phases: [
       'Pilot – baseline (Fall 2024)',
       'Pilot – phone survey follow-up (Winter 2025)',
@@ -229,6 +259,7 @@ export const FALLBACK_PROJECTS: Project[] = [
     client: 'Hakeem Bishi',
     client_detail: 'Doctoral Candidate, Department of Geography, Planning & Environment, Concordia University, Canada',
     period_label: 'Spring 2025',
+    funder: 'Fonds de recherche du Québec (FRQ) / Concordia University',
     summary: 'Research on market redevelopment across Lagos, examining how redevelopment shapes traders and the informal economy.',
     cover_url: '/assets/photos/photo-02.jpeg',
     featured: true,

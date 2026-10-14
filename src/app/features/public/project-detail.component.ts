@@ -23,17 +23,21 @@ import { RichTextComponent } from '../../shared/rich-text.component';
             <a routerLink="/projects" class="back">← All projects</a>
             <span class="chip" [class.chip--live]="p.status === 'ongoing'">{{ p.status === 'ongoing' ? 'Ongoing' : 'Completed' }}</span>
             <h1>{{ p.title }}</h1>
-            <p class="period">{{ p.period_label }}</p>
+            <p class="period">{{ p.period_label }}@if (p.funder) { · Funder: {{ p.funder }}}</p>
           </div>
         </header>
 
         <div class="container body">
           <aside reveal>
             <dl>
-              <dt>Client</dt>
+              <dt>Client(s) / PI(s)</dt>
               <dd><strong>{{ p.client }}</strong>@if (p.client_detail) {<span>{{ p.client_detail }}</span>}</dd>
               <dt>Timeline</dt>
               <dd>{{ p.period_label }}</dd>
+              @if (p.funder) {
+                <dt>Funder</dt>
+                <dd>{{ p.funder }}</dd>
+              }
               @if (p.phases.length) {
                 <dt>Phases</dt>
                 <dd>

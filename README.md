@@ -37,6 +37,9 @@ npm run build      # production build in dist/dev-hub/browser
 6. **Team member bios.** Run [`supabase/003_team_bio.sql`](supabase/003_team_bio.sql) the same way. It adds the
    **About** text shown in the pop-up card on the Team page.
 
+7. **Project funders.** Run [`supabase/004_funders_and_content.sql`](supabase/004_funders_and_content.sql). It adds the
+   **Funder** field to projects, fills in the known funders, and updates the home page enumerator figure to 55+.
+
 ### Email alerts for new messages
 
 When a contact message is saved, the database calls the `notify-new-message` Edge Function, which emails every
