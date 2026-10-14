@@ -46,18 +46,6 @@ import { FitWidthDirective } from '../../shared/fit-width.directive';
       </div>
     </section>
 
-    <section class="team-photo">
-      <div class="container">
-        <figure reveal>
-          <img src="/assets/photos/team-vests.jpeg" alt="The DevHub Research Limited team in DevHub field vests" loading="lazy" />
-          <figcaption>
-            <strong>One team, in the field.</strong>
-            <span>The DevHub Research Limited team.</span>
-          </figcaption>
-        </figure>
-      </div>
-    </section>
-
     <section class="section section--lavender">
       <div class="container">
         <p class="ghost-title" aria-hidden="true">our people</p>
@@ -70,10 +58,22 @@ import { FitWidthDirective } from '../../shared/fit-width.directive';
           </div>
           <p class="chart-hint">Hover over or tap a person to see their profile.</p>
           <div class="enumerators" reveal>
-            <strong>55+ enumerators</strong>
-            <span>Ethically certified field researchers, trained on every instrument before they go to the field.</span>
+            <strong>55+ enumerators and auditors / back-checkers</strong>
+            <span>Ethically certified field researchers and quality auditors, trained on every instrument before they go to the field.</span>
           </div>
         }
+      </div>
+    </section>
+
+    <section class="section team-photo">
+      <div class="container">
+        <figure reveal>
+          <img src="/assets/photos/team-vests.jpeg" alt="The DevHub Research Limited team in DevHub field vests" loading="lazy" />
+          <figcaption>
+            <strong>One team, in the field.</strong>
+            <span>The DevHub Research Limited team.</span>
+          </figcaption>
+        </figure>
       </div>
     </section>
 
@@ -89,7 +89,6 @@ import { FitWidthDirective } from '../../shared/fit-width.directive';
     .profile-link { display: inline-flex; gap: .3rem; margin-left: .25rem; font-weight: 700; color: var(--blue); text-underline-offset: 3px; white-space: nowrap; }
     .profile-link:hover { color: var(--purple); }
 
-    .team-photo { padding-bottom: clamp(4rem, 8vw, 6rem); }
     .team-photo figure { position: relative; margin: 0; border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow); }
     .team-photo img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; object-position: center 40%; }
     .team-photo figcaption {
@@ -105,7 +104,7 @@ import { FitWidthDirective } from '../../shared/fit-width.directive';
     .chart-hint { text-align: center; color: var(--muted); font-size: .88rem; margin: .5rem 0 0; }
 
     .enumerators {
-      position: relative; display: grid; gap: .3rem; text-align: center; max-width: 560px; margin: 1.5rem auto 0;
+      position: relative; display: grid; gap: .3rem; text-align: center; max-width: 680px; margin: 1.5rem auto 0;
       padding: 1.4rem 2rem; border-radius: var(--radius); border: 2px solid var(--purple); background: #fff;
     }
     .enumerators strong { font: 800 1.3rem/1.2 var(--font-display); color: var(--purple); }
